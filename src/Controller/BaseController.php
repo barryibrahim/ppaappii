@@ -5,6 +5,11 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Form\TypeBatterieType;
+use Symfony\Component\HttpFoundation\Request;
+use App\Entity\TypeBatterie;
+use Doctrine\ORM\EntityManagerInterface;
+
 
 final class BaseController extends AbstractController
 {
@@ -14,9 +19,22 @@ final class BaseController extends AbstractController
         return $this->render('base/index.html.twig', []);
     }
     #[Route('/typebatterie', name: 'app_typebatterie')]
-    public function typebatterie(): Response
+    public function typebatterie(Request $request, EntityManagerInterface $em): Response
     {
-        return $this->render('base/typebatterie.html.twig', []);
+        $TypeBatterie = new TypeBatterie();
+        $form = $this->createForm(TypeBatterieType::class,$TypeBatterie);
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em->persist($TypeBatterie);
+                $em->flush();
+                $this->addFlash('notice', 'Message envoyé');
+                return $this->redirectToRoute('app_typebatterie');
+            }
+        }
+        return $this->render('base/typebatterie.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
     #[Route('/mentions', name: 'app_mentions')]
     public function mentions(): Response

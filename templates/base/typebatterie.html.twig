@@ -1,5 +1,15 @@
 {% extends 'base.html.twig' %}
-{% block title %}{{parent()}}TypeBatterie{% endblock %}
+{% block title %}
+	{{parent()}}TypeBatterie
+{% endblock %}
 {% block body %}
-<h1 class="text-center text-warning mt-4 pt-4 display-1 fw-bold"> TypeBatterie</h1>
+	<div class="container-fluid">
+		<div class="row justify-content-center">
+			<div class="col-10 text">
+								<h1 class=" text-center text-warning mt-4 pt-4 display-1 fw-bold">
+				TypeBatterie</h1>
+			{{form(form)}}
+			</div>
+		</div>
+	</div>
 {% endblock %}
